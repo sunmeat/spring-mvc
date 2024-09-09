@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Форма</title>
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
+</head>
+<body>
+    <header>
+ 		<h1 class="page-title">Укажите данные контакта</h1>
+    </header>
+   
+    <form th:action="@{/contacts/add}" th:object="${contact}" method="post" class="contact-form">
+        <div class="form-group">
+            <label for="name" class="form-label">ФИО</label>
+            <input id="name" type="text" th:field="*{name}" class="form-input" />
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">Почта</label>
+            <input id="email" type="email" th:field="*{email}" class="form-input" />
+        </div>
+        <div class="form-group">
+            <label for="phone" class="form-label">Телефон</label>
+            <input id="phone" type="text" th:field="*{phone}" class="form-input" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+    </form>
+</body>
+</html>
