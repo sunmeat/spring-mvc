@@ -9,57 +9,57 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Controller // этот класс является контроллером Spring MVC
-@RequestMapping("/contacts") // устанавка базового URL для всех методов в этом контроллере
+@Controller // цей клас є контролером Spring MVC, який обробляє http запити
+@RequestMapping("/contacts") // встановлення базового url для всіх методів у цьому контролері
 public class ContactController {
 
-    @Autowired // автоматическое внедрение экземпляра ContactService в контроллер
-    private ContactService contactService;
+	@Autowired // автоматичне впровадження екземпляра ContactService в контролер
+	private ContactService contactService;
 
-    // аннотация делает то самое Dependency Injection
-    // public ContactController(ContactService contactService) {
-    //     this.contactService = contactService;
-    // }
-    
-    @GetMapping // обработка HTTP GET запроса по URL /contacts
-    public String listContacts(Model model) {
-        model.addAttribute("contacts", contactService.getAllContacts()); // добавление списка контактов в модель
-        return "contact-list"; // возврат имени представления (шаблона), которое будет отображено
-    }
+	// анотація робить dependency injection (впровадження залежностей)
+	// public ContactController(ContactService contactService) {
+	// this.contactService = contactService;
+	// }
 
-    @GetMapping("/add") // обработка GET запроса по URL /contacts/add
-    public String addContactForm(Model model) {
-        model.addAttribute("contact", new Contact()); // создание нового объекта Contact и добавляет его в модель
-        return "contact-form"; // возврат имени представления для формы добавления контакта
-    }
+	@GetMapping // обробка HTTP GET-запиту за url /contacts
+	public String listContacts(Model model) {
+		model.addAttribute("contacts", contactService.getAllContacts()); // додавання списку контактів у модель
+		return "contact-list"; // повернення імені представлення (шаблону), яке буде відображено
+	}
 
-    @PostMapping("/add") // обработка POST запроса по URL /contacts/add
-    public String addContact(@ModelAttribute Contact contact) {
-        contactService.saveContact(contact); // сохранение нового контакта в базе данных
-        return "redirect:/contacts"; // перенаправление на страницу со списком контактов
-    }
+	@GetMapping("/add") // обробка GET-запиту за url /contacts/add
+	public String addContactForm(Model model) {
+		model.addAttribute("contact", new Contact()); // створення нового об'єкта Contact і додавання його в модель
+		return "contact-form"; // повернення імені подання для форми додавання контакта
+	}
 
-    @GetMapping("/edit/{id}") // обработка GET запроса по URL /contacts/edit/{id}
-    public String editContactForm(@PathVariable("id")Long id, Model model) {
-        Optional<Contact> contact = contactService.getContactById(id); // получение контакта по его ID
-        if (contact.isPresent()) { // проверка, существует ли контакт
-            model.addAttribute("contact", contact.get()); // добавление контакта в модель для редактирования
-            return "contact-form"; // возврат имя представления для формы редактирования контакта
-        } else {
-            return "redirect:/contacts"; // если контакт не найден, перенаправляет на страницу со списком контактов
-        }
-    }
+	@PostMapping("/add") // обробка POST-запиту за url /contacts/add
+	public String addContact(@ModelAttribute Contact contact) {
+		contactService.saveContact(contact); // збереження нового контакта в БД
+		return "redirect:/contacts"; // перенаправлення на сторінку зі списком контактів
+	}
 
-    @PostMapping("/edit/{id}") // обработка POST запроса по URL /contacts/edit/{id}
-    public String editContact(@PathVariable("id")Long id, @ModelAttribute Contact contact) {
-        contact.setId(id); // установка ID контакта, чтобы обновить существующий контакт
-        contactService.saveContact(contact); // сохранение обновленного контакта в базе данных
-        return "redirect:/contacts"; // перенаправление на страницу со списком контактов
-    }
+	@GetMapping("/edit/{id}") // обробка GET-запиту за url /contacts/edit/{id}
+	public String editContactForm(@PathVariable("id") Long id, Model model) {
+		Optional<Contact> contact = contactService.getContactById(id); // отримання контакта за його id
+		if (contact.isPresent()) { // перевірка, чи існує контакт
+			model.addAttribute("contact", contact.get()); // додавання контакта в модель для редагування
+			return "contact-form"; // повернення імені представлення для форми редагування контакта
+		} else {
+			return "redirect:/contacts"; // якщо контакт не знайдено, перенаправлення на сторінку зі списком контактів
+		}
+	}
 
-    @GetMapping("/delete/{id}") // обработка GET запроса по URL /contacts/delete/{id}
-    public String deleteContact(@PathVariable("id")Long id) {
-        contactService.deleteContact(id); // удаление контакта из базы данных по его ID
-        return "redirect:/contacts"; // перенаправка на страницу со списком контактов
-    }
+	@PostMapping("/edit/{id}") // обробка POST-запиту за url /contacts/edit/{id}
+	public String editContact(@PathVariable("id") Long id, @ModelAttribute Contact contact) {
+		contact.setId(id); // встановлення id контакта для оновлення існуючого контакта
+		contactService.saveContact(contact); // збереження оновленого контакта в базі даних
+		return "redirect:/contacts"; // перенаправлення на сторінку зі списком контактів
+	}
+
+	@GetMapping("/delete/{id}") // обробка GET-запиту за url /contacts/delete/{id}
+	public String deleteContact(@PathVariable("id") Long id) {
+		contactService.deleteContact(id); // видалення контакта з бази даних за його id
+		return "redirect:/contacts"; // перенаправлення на сторінку зі списком контактів
+	}
 }
